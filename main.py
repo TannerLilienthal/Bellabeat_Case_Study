@@ -23,8 +23,8 @@ day_sleep.name = 'day_sleep'
 heartrate_seconds = pd.DataFrame(pd.read_csv("fitbit_data/heartrate_seconds.csv"))
 heartrate_seconds.name = 'heartrate_seconds'
 # headers = (id, time, heartrate, day_of_week)
-hourly_ativity = pd.DataFrame(pd.read_csv("fitbit_data/hourly_activity.csv"))
-hourly_ativity.name = 'hourly_activity'
+hourly_activity = pd.DataFrame(pd.read_csv("fitbit_data/hourly_activity.csv"))
+hourly_activity.name = 'hourly_activity'
 # headers = (id, activity_hour, calories, total_intensity, average_intensity,
 #           step_total, day_of_week)
 minute_calories = pd.DataFrame(pd.read_csv("fitbit_data/minute_calories.csv"))
@@ -40,7 +40,7 @@ weight_log = pd.DataFrame(pd.read_csv("fitbit_data/weight_log.csv"))
 weight_log.name = 'weight_log'
 # headers = (id, date, weight_kg, weight_lb, bmi, is_manual_report, day_of_week)
 
-tables = [daily_activity, day_sleep, heartrate_seconds, hourly_ativity,
+tables = [daily_activity, day_sleep, heartrate_seconds, hourly_activity,
           minute_calories, minute_intensities, minute_steps, weight_log]
 
 
@@ -53,14 +53,14 @@ def print_out_summary_statistics():
                 numeric_columns.append(column)
         print(f'==========={table.name}===========')
         print(table.describe())
+        
 
-
-def compare_steps_to_calories():
-    plt.scatter(daily_activity.total_steps, daily_activity.calories, c=daily_activity.calories, cmap=mpl.cm.coolwarm)
-    plt.colorbar(orientation='vertical')
-    plt.show()
-
+# check amount of hours spent sedentary, talk about this
+def sedentary_hours_visual():
+    plt.
+# check average logged events, histogram?
+# check what type of activity is the most frequent, to aid who to market to
+# check average length of intensity, shorter or longer and is there a correlation between length & intensity
 
 print_out_summary_statistics()
-compare_steps_to_calories()
-
+compare_hour_to_average_intensity()
