@@ -55,15 +55,37 @@ def print_out_summary_statistics():
 
 # check amount of hours spent sedentary, talk about this
 def sedentary_hours_visual():
-    # make pie showing consecutive hours sedentary
     # sectors for 0-8hr, 8-12, 12-16, 16-20, 20-24, and 24
-    pass
+    zero_to_eight = daily_activity[daily_activity['sedentary_minutes'] < 480]
+    eight_to_twelve = daily_activity[(daily_activity['sedentary_minutes'] >= 480) &
+                                     (daily_activity['sedentary_minutes'] < 720)]
+    twelve_to_sixteen = daily_activity[(daily_activity['sedentary_minutes'] >= 720) &
+                                     (daily_activity['sedentary_minutes'] < 960)]
+    sixteen_to_twenty = daily_activity[(daily_activity['sedentary_minutes'] >= 960) &
+                                     (daily_activity['sedentary_minutes'] < 1200)]
+    twenty_to_twentyfour = daily_activity[(daily_activity['sedentary_minutes'] >= 1200) &
+                                     (daily_activity['sedentary_minutes'] < 1440)]
+    twentyfour = daily_activity[daily_activity['sedentary_minutes'] == 1440]
+
+    # make pie showing consecutive hours sedentary
+    labels = ['0 to 8 hrs', '8 to 12 hrs', '12 to 16 hrs', '16 to 20 hrs', '20 to 24 hrs', '24 hrs']
+    sizes = [zero_to_eight['id'].count(), eight_to_twelve['id'].count(), twelve_to_sixteen['id'].count(),
+             sixteen_to_twenty['id'].count(), twenty_to_twentyfour['id'].count(), twentyfour['id'].count()]
+    fig1, pie_chart = plt.subplots()
+    pie_chart.pie(sizes, labels=labels, explode=(0, 0, 0, 0, 0, 0.1), autopct='%1.1f%%', startangle=90)
+    plt.title('Frequency of Sedentary Hours')
+    pie_chart.axis('equal')
+    plt.show()
 
 
 # check number of logged events per id
 def logged_events_visual():
-    # make a histogram, probably use average for each id?
-    pass
+    # gather time of day rows
+    plt.hist(daily_activity['day_of_week'], bins=7, width=0.5, edgecolor='black', color='red')
+    plt.title('Frequency of Daily Logs')
+    plt.xlabel('Day of Week')
+    plt.ylabel('Frequency')
+    plt.show()
 
 
 # check what type of activity is the most frequent, to aid who to market to
@@ -78,4 +100,8 @@ def type_of_activity_visual():
 # -check average length of intensity, shorter or longer and is there a correlation between length & intensity
 # -check total_time_in_bed vs different activity types
 
-print_out_summary_statistics()
+# print_out_summary_statistics()
+# sedentary_hours_visual()
+# logged_events_visual()
+time_col = pd.to_datetime(hourly_activity['activity_hour'])
+print(time_col.between_time('2:00', '4:00').set_index('Datetime'))
