@@ -1,8 +1,6 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib as mpl
-import datetime as dt
 
 pd.set_option('display.max_columns', 20)
 pd.set_option('display.max_colwidth', 40)
@@ -53,14 +51,31 @@ def print_out_summary_statistics():
                 numeric_columns.append(column)
         print(f'==========={table.name}===========')
         print(table.describe())
-        
+
 
 # check amount of hours spent sedentary, talk about this
 def sedentary_hours_visual():
-    plt.
-# check average logged events, histogram?
+    # make pie showing consecutive hours sedentary
+    # sectors for 0-8hr, 8-12, 12-16, 16-20, 20-24, and 24
+    pass
+
+
+# check number of logged events per id
+def logged_events_visual():
+    # make a histogram, probably use average for each id?
+    pass
+
+
 # check what type of activity is the most frequent, to aid who to market to
-# check average length of intensity, shorter or longer and is there a correlation between length & intensity
+def type_of_activity_visual():
+    # make a line graph that has separate lines for each type of activity
+    # y-axis will be total_minutes
+    # x-axis will be time(date & day_of_week)
+    pass
+
+
+# OTHER POTENTIAL RELATIONSHIPS TO CHECK FOR
+# -check average length of intensity, shorter or longer and is there a correlation between length & intensity
+# -check total_time_in_bed vs different activity types
 
 print_out_summary_statistics()
-compare_hour_to_average_intensity()
