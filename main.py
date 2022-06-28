@@ -1,12 +1,13 @@
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 
+# pandas formatting preferences
 pd.set_option('display.max_columns', 20)
 pd.set_option('display.max_colwidth', 40)
 pd.set_option('display.width', 1000)
 pd.options.display.float_format = '{:20,.2f}'.format
 
+# read all the csv files
 daily_activity = pd.DataFrame(pd.read_csv("fitbit_data/daily_activity.csv"))
 daily_activity.name = 'daily_activity'
 # headers = (id, activity_date, total_steps, total_distance, tracker_distance,
@@ -38,11 +39,10 @@ weight_log = pd.DataFrame(pd.read_csv("fitbit_data/weight_log.csv"))
 weight_log.name = 'weight_log'
 # headers = (id, date, weight_kg, weight_lb, bmi, is_manual_report, day_of_week)
 
-tables = [daily_activity, day_sleep, heartrate_seconds, hourly_activity,
-          minute_calories, minute_intensities, minute_steps, weight_log]
-
 
 def print_out_summary_statistics():
+    tables = [daily_activity, day_sleep, heartrate_seconds, hourly_activity,
+              minute_calories, minute_intensities, minute_steps, weight_log]
     for table in tables:
         numeric_data_types = ['int64', 'float64']
         numeric_columns = []
@@ -68,11 +68,13 @@ def sedentary_hours_visual():
     twentyfour = daily_activity[daily_activity['sedentary_minutes'] == 1440]
 
     # make pie showing consecutive hours sedentary
-    labels = ['0 to 8 hrs', '8 to 12 hrs', '12 to 16 hrs', '16 to 20 hrs', '20 to 24 hrs', '24 hrs']
-    sizes = [zero_to_eight['id'].count(), eight_to_twelve['id'].count(), twelve_to_sixteen['id'].count(),
-             sixteen_to_twenty['id'].count(), twenty_to_twentyfour['id'].count(), twentyfour['id'].count()]
+    labels = ['0 to 8 hrs', '8 to 12 hrs', '12 to 16 hrs',
+              '16 to 20 hrs', '20 to 24 hrs', '24 hrs']
+    sizes = [zero_to_eight['id'].count(), eight_to_twelve['id'].count(),
+             twelve_to_sixteen['id'].count(), sixteen_to_twenty['id'].count(),
+             twenty_to_twentyfour['id'].count(), twentyfour['id'].count()]
     fig1, pie_chart = plt.subplots()
-    pie_chart.pie(sizes, labels=labels, explode=(0, 0, 0, 0, 0, 0.1), autopct='%1.1f%%', startangle=90)
+    pie_chart.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
     plt.title('Frequency of Sedentary Hours')
     pie_chart.axis('equal')
     plt.show()
@@ -99,6 +101,7 @@ def type_of_activity_visual():
     plt.xticks([0, 15, 30], ['Day 1', 'Day 15', 'Day 30'])
     plt.xlabel('Time')
     plt.ylabel('Total Minutes')
+    plt.legend(['Very Active Minutes', 'Fairly Active Minutes', 'Lightly Active Minutes'])
     plt.show()
 
 
@@ -106,7 +109,15 @@ def type_of_activity_visual():
 # -check average length of intensity, shorter or longer and is there a correlation between length & intensity
 # -check total_time_in_bed vs different activity types
 
-# print_out_summary_statistics()
-# sedentary_hours_visual()
-# logged_events_visual()
+print_out_summary_statistics()
+sedentary_hours_visual()
+logged_events_visual()
 type_of_activity_visual()
+daily_activity.describe().to_csv('daily_activity_desc.csv')
+day_sleep.describe().to_csv('day_sleep_desc.csv')
+heartrate_seconds.describe().to_csv('heartrate_seconds_desc.csv')
+hourly_activity.describe().to_csv('hourly_activity_desc.csv')
+minute_calories.describe().to_csv('minute_calories_desc.csv')
+minute_intensities.describe().to_csv('minute_intensities_desc.csv')
+minute_steps.describe().to_csv('minute_steps_desc.csv')
+weight_log.describe().to_csv('weight_log_desc.csv')
