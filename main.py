@@ -91,9 +91,15 @@ def logged_events_visual():
 # check what type of activity is the most frequent, to aid who to market to
 def type_of_activity_visual():
     # make a line graph that has separate lines for each type of activity
-    # y-axis will be total_minutes
-    # x-axis will be time(date & day_of_week)
-    pass
+    sorted_dates = daily_activity['activity_date'].sort_values()
+    plt.plot(sorted_dates, daily_activity['very_active_minutes'].cumsum(), color='blue')
+    plt.plot(sorted_dates, daily_activity['fairly_active_minutes'].cumsum(), color='red')
+    plt.plot(sorted_dates, daily_activity['lightly_active_minutes'].cumsum(), color='green')
+    plt.title('Cumulative User Minutes Over Time (30 days)')
+    plt.xticks([0, 15, 30], ['Day 1', 'Day 15', 'Day 30'])
+    plt.xlabel('Time')
+    plt.ylabel('Total Minutes')
+    plt.show()
 
 
 # OTHER POTENTIAL RELATIONSHIPS TO CHECK FOR
@@ -103,5 +109,4 @@ def type_of_activity_visual():
 # print_out_summary_statistics()
 # sedentary_hours_visual()
 # logged_events_visual()
-time_col = pd.to_datetime(hourly_activity['activity_hour'])
-print(time_col.between_time('2:00', '4:00').set_index('Datetime'))
+type_of_activity_visual()
