@@ -1,0 +1,292 @@
+﻿CREATE TABLE daily_activity(
+        id VARCHAR(20),
+        activity_date DATE,
+        total_steps INT,
+        total_distance REAL,
+        tracker_distance REAL,
+        logged_activities_distance REAL,
+        very_active_distance REAL,
+        moderately_active_distance REAL,
+        light_active_distance REAL,
+        sedentary_active_distance REAL,
+        very_active_minutes INT,
+        fairly_active_mintues INT,
+        lightly_active_minutes INT,
+        sedentary_minutes INT,
+        calories INT)
+
+
+CREATE TABLE day_sleep(
+        id VARCHAR(20),
+        sleep_date DATE,
+        total_sleep_records SMALLINT,
+        total_minutes_asleep SMALLINT,
+        total_time_in_bed SMALLINT)
+
+
+CREATE TABLE heartrate_seconds(
+        id VARCHAR(20),
+        “time” TIMESTAMP,
+        heartrate SMALLINT)
+
+
+CREATE TABLE hourly_calories(
+        id VARCHAR(20),
+        activity_hour TIMESTAMP,
+        calories SMALLINT)
+
+
+CREATE TABLE hourly_intensities(
+        id VARCHAR(20),
+        activity_hour TIMESTAMP,
+        total_intensity SMALLINT,
+        average_intensity REAL)
+
+
+CREATE TABLE hourly_steps(
+        id VARCHAR(20),
+        activity_hour TIMESTAMP,
+        step_total INT)
+
+
+CREATE TABLE minute_calories(
+        id VARCHAR(20),
+        activity_minute TIMESTAMP,
+        calories REAL)
+
+
+CREATE TABLE minute_intensities(
+        id VARCHAR(20),
+        activity_minute TIMESTAMP,
+        intensity SMALLINT)
+
+
+CREATE TABLE minute_steps(
+        id VARCHAR(20),
+        activity_minute TIMESTAMP,
+        steps SMALLINT)
+
+
+CREATE TABLE weight_log(
+        id VARCHAR(20),
+        "date" DATE,
+        weight_kg REAL,
+        weight_lb REAL,
+        bmi REAL,
+        is_manual_report BOOLEAN)
+
+
+________________
+
+
+
+
+SELECT
+        COUNT(DISTINCT id)
+FROM
+        daily_activity
+
+
+SELECT
+        COUNT(DISTINCT id)
+FROM
+        day_sleep
+
+
+SELECT
+        COUNT(DISTINCT id)
+FROM
+        heartrate_seconds
+
+
+SELECT
+        COUNT(DISTINCT id)
+FROM
+        hourly_calories
+
+
+SELECT
+        COUNT(DISTINCT id)
+FROM
+        hourly_intensities
+
+
+SELECT
+        COUNT(DISTINCT id)
+FROM
+        hourly_steps
+
+
+SELECT
+        COUNT(DISTINCT id)
+FROM
+        minute_calories
+
+
+SELECT
+        COUNT(DISTINCT id)
+FROM
+        minute_intensities
+
+
+SELECT
+        COUNT(DISTINCT id)
+FROM
+        minute_steps
+
+
+SELECT
+        COUNT(DISTINCT id)
+FROM
+        weight_log
+
+
+SELECT
+        MAX(activity_date),
+        MIN(activity_date)
+FROM
+        daily_activity
+
+
+________________
+
+
+
+
+ALTER TABLE
+        daily_activity
+ADD
+        day_of_week VARCHAR(10)
+        
+UPDATE 
+        daily_activity
+SET
+        day_of_week = To_Char(activity_date, 'DAY') 
+
+
+ALTER TABLE
+        day_sleep
+ADD
+        day_of_week VARCHAR(10)
+
+
+UPDATE
+        day_sleep
+SET
+        day_of_week = To_Char(sleep_date, 'DAY')
+
+
+ALTER TABLE
+        heartrate_seconds
+ADD
+        day_of_week VARCHAR(10)
+
+
+UPDATE
+        heartrate_seconds
+SET
+        day_of_week = To_Char("time", 'DAY')
+
+
+ALTER TABLE
+        hourly_calories
+ADD
+        total_intensity SMALLINT,
+ADD
+        average_intensity REAL,
+ADD
+        step_total INT
+
+
+UPDATE 
+        hourly_calories
+SET
+        total_intensity = (SELECT total_intensity
+                                           FROM hourly_intensities
+                                           WHERE hourly_calories.id = hourly_intensities.id AND hourly_calories.activity_hour = hourly_intensities.activity_hour)
+
+
+DELETE FROM hourly_calories
+WHERE id IS NULL
+
+
+UPDATE
+        hourly_calories
+SET
+        step_total = (SELECT step_total
+                                           FROM hourly_steps
+                                           WHERE hourly_calories.id = hourly_steps.id AND hourly_calories.activity_hour = hourly_steps.activity_hour)
+
+
+DROP TABLE
+        hourly_intensities
+
+
+DROP TABLE
+        hourly_steps
+
+
+ALTER TABLE
+        hourly_calories
+RENAME TO
+        hourly_activity
+
+
+ALTER TABLE
+        hourly_activity
+ADD
+        day_of_week VARCHAR(10)
+
+
+UPDATE
+        hourly_activity
+SET
+        day_of_week = To_Char(activity_hour, 'DAY')
+
+
+ALTER TABLE
+        minute_calories
+ADD
+        day_of_week VARCHAR(10)
+
+
+UPDATE
+        minute_calories
+SET
+        day_of_week = To_Char(activity_minute, 'DAY')
+
+
+ALTER TABLE
+        minute_intensities
+ADD
+        day_of_week VARCHAR(10)
+
+
+UPDATE
+        minute_intensities
+SET
+        day_of_week = To_Char(activity_minute, 'DAY')
+
+
+ALTER TABLE
+        minute_steps
+ADD
+        day_of_week VARCHAR(10)
+
+
+UPDATE
+        minute_steps
+SET
+        day_of_week = To_Char(activity_minute, 'DAY')
+
+
+ALTER TABLE
+        weight_log
+ADD
+        day_of_week VARCHAR(10)
+
+
+UPDATE
+        weight_log
+SET
+        day_of_week = To_Char("date", 'DAY')
